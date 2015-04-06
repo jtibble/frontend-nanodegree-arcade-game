@@ -21,11 +21,17 @@ var Enemy = function() {
     // Pick a random speed from 50 to 100
     this.dx = Math.random()*50 + 50;
     this.dy = 0;
+    
+    // Track the lifetime of each enemy for animating
+    this.lifeTime = 0.0;
+    this.periodMultiplier = Math.floor(Math.random()*2) + 2;
+    
 }
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+    this.lifeTime += dt;
     
     // Wrap movement around to the other side of the screen
     if( this.x > ctx.canvas.width + 100 ){
@@ -42,7 +48,8 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    var y = this.y + Math.abs(Math.sin(this.lifeTime * this.periodMultiplier))*5;
+    ctx.drawImage(Resources.get(this.sprite), this.x, y);
 }
 
 // Now write your own player class
@@ -52,17 +59,20 @@ var Player = function(){
     this.sprite = 'images/char-boy.png';
     
     this.x = 200;
-    this.y = 220;
+    this.y = 380;
+    
+    this.lifeTime = 0.0;
     
     this.dx = 100;
     this.dy = 80;
     
     this.render = function(){
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        var y = this.y + Math.abs(Math.sin(this.lifeTime*4))*5;
+        ctx.drawImage(Resources.get(this.sprite), this.x, y);
     };
     
     this.update = function(dt){
-        
+        this.lifeTime += dt;
     };
     
     this.handleInput = function(keyCode){
