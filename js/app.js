@@ -8,7 +8,7 @@ var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
     
     // Start all enemies off-screen to the left
-    this.x = -100;
+    this.x = -100 * (Math.random()*3 + 1);
     
     // Pick a new row
     this.pickNewRow = function(){
@@ -24,7 +24,7 @@ var Enemy = function() {
     
     // Track the lifetime of each enemy for animating
     this.lifeTime = 0.0;
-    this.periodMultiplier = Math.floor(Math.random()*2) + 2;
+    this.periodMultiplier = Math.random()*2 + 2;
     
 }
 
@@ -78,16 +78,24 @@ var Player = function(){
     this.handleInput = function(keyCode){
         switch(keyCode){
             case 'left':
-                this.x -= this.dx;
+                if( this.x - this.dx >= 0 ){
+                    this.x -= this.dx;
+                }
                 break;
             case 'down':
-                this.y += this.dy;
+                if( this.y + this.dy < 460 ){
+                    this.y += this.dy;
+                }
                 break;
             case 'right':
-                this.x += this.dx;
+                if( this.x + this.dx < 500 ){
+                    this.x += this.dx;
+                }
                 break;
             case 'up':
-                this.y -= this.dy;
+                if( this.y - this.dy >= -20 ){
+                    this.y -= this.dy;
+                }
                 break;
             default:
                 console.log('bad key code');
