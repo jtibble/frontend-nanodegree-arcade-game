@@ -1,6 +1,4 @@
 frontend-nanodegree-arcade-game
 ===============================
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
-
-for self-checking their submission.
+To play the game, download the code and run the index.html page in your browser, or follow this link to play it on Github Pages:  http://jtibble.github.io/frontend-nanodegree-arcade-game/
