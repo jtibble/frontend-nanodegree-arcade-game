@@ -16,6 +16,11 @@ var Enemy = function() {
         this.y = row*83 + 50;
     }
     
+    this.boundingX = 100;
+    this.boundingY = 70;
+    this.boundingXOffset = 0;
+    this.boundingYOffset = 80;
+    
     this.pickNewRow();
     
     // Pick a random speed from 50 to 100
@@ -52,29 +57,40 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, y);
 }
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+//Player class
 var Player = function(){
     this.sprite = 'images/char-boy.png';
     
-    this.x = 200;
-    this.y = 380;
+    this.reset = function(){
+        this.x = 200;
+        this.y = 380;
+        this.boundingX = 70;
+        this.boundingY = 70;
+        this.boundingXOffset = 15;
+        this.boundingYOffset = 80;
+
+        this.lifeTime = 0.0;
+
+        this.dx = 100;
+        this.dy = 80;
+    };
     
-    this.lifeTime = 0.0;
+    // Start the player at their starting location
+    this.reset();
     
-    this.dx = 100;
-    this.dy = 80;
-    
+    // Render the player, adding a slight bounce to increase visual appeal
     this.render = function(){
         var y = this.y + Math.abs(Math.sin(this.lifeTime*4))*5;
         ctx.drawImage(Resources.get(this.sprite), this.x, y);
     };
     
+    // Extend the life of the player to animate properly
     this.update = function(dt){
         this.lifeTime += dt;
     };
     
+    // Move the player based on input
+    // Fence the player into the canvas by setting limits on x and y
     this.handleInput = function(keyCode){
         switch(keyCode){
             case 'left':
@@ -109,7 +125,7 @@ var Player = function(){
 // Place the player object in a variable called player
 var allEnemies = [];
 
-for( var i=0; i<5; i++){
+for( var i=0; i<7; i++){
     allEnemies.push( new Enemy() );
 }
 

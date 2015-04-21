@@ -80,7 +80,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -95,6 +95,46 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         player.update(dt);
+    }
+    
+    /* This is called to check for collisions between the player and all enemies.
+     * It is a simple O(n) check, which could be improved in various ways if I
+     * had more time to develop it. For this scenario, N is small
+     */
+    function checkCollisions() {
+        
+        // Test the x-bounds of the collison boxes for enemy-to-player
+        function checkXCollision(player, enemy) {
+            var enemyLeftEdge = enemy.x + enemy.boundingXOffset;
+            var enemyRightEdge = enemyLeftEdge + enemy.boundingX;
+            
+            var playerLeftEdge = player.x + player.boundingXOffset;
+            var playerRightEdge = playerLeftEdge + player.boundingX;
+            
+            return (enemyRightEdge > playerLeftEdge && enemyRightEdge < playerRightEdge) ||
+                   (enemyLeftEdge > playerLeftEdge && enemyLeftEdge < playerRightEdge);
+        }
+        
+        // Test the y-bounds of the collision boxes for enemy and player
+        function checkYCollision(player, enemy) {
+            var enemyTopEdge = enemy.y + enemy.boundingYOffset;
+            var enemyBottomEdge = enemyTopEdge + enemy.boundingY;
+            var playerTopEdge = player.y + player.boundingYOffset;
+            var playerBottomEdge = playerTopEdge + player.boundingY;
+            
+            return (enemyTopEdge > playerTopEdge && enemyTopEdge < playerBottomEdge) ||
+                   (enemyBottomEdge > playerTopEdge && enemyBottomEdge < playerBottomEdge);
+        }
+                
+        for( var i in allEnemies ) {
+            var collisionX = checkXCollision(player, allEnemies[i]);
+            var collisionY = checkYCollision(player, allEnemies[i]);
+            
+            if( collisionX && collisionY ){
+                player.reset();
+                return;
+            }
+        }
     }
 
     /* This function initially draws the "game level", it will then call
